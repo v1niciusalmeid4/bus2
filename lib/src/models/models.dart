@@ -1,0 +1,11 @@
+export 'coordinates_model.dart';
+export 'dob_model.dart';
+export 'id_model.dart';
+export 'location_model.dart';
+export 'login_model.dart';
+export 'name_model.dart';
+export 'picture_model.dart';
+export 'registered_model.dart';
+export 'street_model.dart';
+export 'timezone_model.dart';
+export 'user_model.dart';
