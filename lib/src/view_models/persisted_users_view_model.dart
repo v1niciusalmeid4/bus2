@@ -22,6 +22,7 @@ class PersistedUsersViewModel extends ChangeNotifier {
 
   bool loading = true;
   bool error = false;
+  bool reachMax = false;
   String? failureMessage;
 
   List<UserModel> get users => _users;
@@ -30,11 +31,21 @@ class PersistedUsersViewModel extends ChangeNotifier {
     loading = true;
     notifyListeners();
 
-    final result = await local.getUsers();
+    final result = await local.findUsers(size: page.size, page: page.page);
 
     _users = result;
-
     loading = false;
+    reachMax = result.length < page.size;
+
+    notifyListeners();
+  }
+
+  Future<void> loadMore() async {
+    page.next();
+
+    final result = await local.findUsers(size: page.size, page: page.page);
+    _users.addAll(result);
+    reachMax = result.length < page.size;
 
     notifyListeners();
   }

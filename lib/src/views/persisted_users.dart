@@ -14,6 +14,8 @@ class PersistedUsersView extends StatefulWidget {
 class _PersistedUsersViewState extends State<PersistedUsersView> {
   late PersistedUsersViewModel viewModel;
 
+  bool get reachMax => viewModel.reachMax;
+
   @override
   void initState() {
     super.initState();
@@ -42,8 +44,12 @@ class _PersistedUsersViewState extends State<PersistedUsersView> {
   }
 
   Widget buildData(BuildContext context) {
-    return ListView.separated(
-      itemBuilder: (context, index) {
+    return PaginationComponent(
+      itemCount: viewModel.users.length,
+      reachMax: reachMax,
+      onFetch: () => viewModel.loadMore(),
+      onPullRefresh: () => viewModel.onInit(),
+      builder: (context, index) {
         final user = viewModel.users[index];
 
         final addr = [
@@ -110,8 +116,6 @@ class _PersistedUsersViewState extends State<PersistedUsersView> {
           ),
         );
       },
-      itemCount: viewModel.users.length,
-      separatorBuilder: (BuildContext context, int index) => Divider(),
     );
   }
 

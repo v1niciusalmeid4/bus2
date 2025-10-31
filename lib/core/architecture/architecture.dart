@@ -3,3 +3,4 @@ export 'navigator.dart';
 export 'result.dart';
 export 'architecture_injector.dart';
 export 'pageable.dart';
+export 'pagination_component.dart';

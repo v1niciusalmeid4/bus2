@@ -49,8 +49,15 @@ class UserLocalRepository {
     );
   }
 
-  Future<List<UserModel>> getUsers() async {
-    final rows = await db.query(UserLocalDataSourcePath.users);
+  Future<List<UserModel>> findUsers({
+    required int size,
+    required int page,
+  }) async {
+    final rows = await db.query(
+      UserLocalDataSourcePath.users,
+      limit: size,
+      offset: page,
+    );
 
     return rows.map(UserModel.fromDatabase).toList();
   }
