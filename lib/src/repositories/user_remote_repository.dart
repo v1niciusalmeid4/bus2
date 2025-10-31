@@ -11,11 +11,10 @@ class UserRemoteRepository {
 
   UserRemoteRepository({required this.local});
 
+  final baseUrl = 'https://randomuser.me';
   final _client = http.Client();
 
   Future<Result> findUsers({required int size, required int page}) async {
-    final baseUrl = 'https://randomuser.me';
-
     final endpoint = '/api/';
 
     final uri = Uri.parse(baseUrl)

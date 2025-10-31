@@ -19,6 +19,8 @@ class _UserDetailsViewState extends State<UserDetailsView> {
 
   bool get isPersisted => viewModel.isPersisted;
 
+  UserModel get user => viewModel.user;
+
   @override
   void initState() {
     super.initState();
@@ -54,8 +56,6 @@ class _UserDetailsViewState extends State<UserDetailsView> {
   }
 
   Widget _buildState(BuildContext context, Widget? child) {
-    final user = viewModel.user;
-
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(child: Header(user: user)),

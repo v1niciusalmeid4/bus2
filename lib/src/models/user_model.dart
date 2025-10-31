@@ -46,22 +46,6 @@ class UserModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'gender': gender,
-      'name': name.toMap(),
-      'email': email,
-      'login': login.toMap(),
-      'dob': dob.toMap(),
-      'registered': registered.toMap(),
-      'phone': phone,
-      'cell': cell,
-      'id': id.toMap(),
-      'picture': picture.toMap(),
-      'nat': nat,
-    };
-  }
-
   static Map<String, dynamic> toDatabase(UserModel u) {
     return {
       'uuid': u.login.uuid,
@@ -99,59 +83,59 @@ class UserModel {
     };
   }
 
-  factory UserModel.fromDatabase(Map<String, dynamic> m) {
+  factory UserModel.fromDatabase(Map<String, dynamic> json) {
     return UserModel(
-      gender: m['gender'] as String,
-      email: m['email'] as String,
-      phone: (m['phone'] ?? '') as String,
-      cell: (m['cell'] ?? '') as String,
-      nat: (m['nat'] ?? '') as String,
+      gender: json['gender'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      cell: json['cell'] as String,
+      nat: json['nat'] as String,
       name: NameModel(
-        title: (m['name_title'] ?? '') as String,
-        first: (m['name_first'] ?? '') as String,
-        last: (m['name_last'] ?? '') as String,
+        title: json['name_title'] as String,
+        first: json['name_first'] as String,
+        last: json['name_last'] as String,
       ),
       location: LocationModel(
         street: StreetModel(
-          number: (m['loc_street_number'] as int?) ?? 0,
-          name: (m['loc_street_name'] ?? '') as String,
+          number: json['loc_street_number'] ?? 0,
+          name: json['loc_street_name'] as String,
         ),
-        city: (m['loc_city'] ?? '') as String,
-        state: (m['loc_state'] ?? '') as String,
-        country: (m['loc_country'] ?? '') as String,
-        postcode: m['loc_postcode'],
+        city: json['loc_city'] as String,
+        state: json['loc_state'] as String,
+        country: json['loc_country'] as String,
+        postcode: json['loc_postcode'] as dynamic,
         coordinates: CoordinatesModel(
-          lat: (m['loc_coords_lat'] ?? '') as String,
-          long: (m['loc_coords_lng'] ?? '') as String,
+          lat: json['loc_coords_lat'] as String,
+          long: json['loc_coords_lng'] as String,
         ),
         timezone: TimezoneModel(
-          offset: (m['loc_tz_offset'] ?? '') as String,
-          description: (m['loc_tz_desc'] ?? '') as String,
+          offset: json['loc_tz_offset'] as String,
+          description: json['loc_tz_desc'] as String,
         ),
       ),
       login: LoginModel(
-        uuid: m['uuid'] as String,
-        username: (m['login_username'] ?? '') as String,
-        md5: (m['login_md5'] ?? '') as String,
-        sha1: (m['login_sha1'] ?? '') as String,
-        sha256: (m['login_sha256'] ?? '') as String,
+        uuid: json['uuid'] as String,
+        username: json['login_username'] as String,
+        md5: json['login_md5'] as String,
+        sha1: json['login_sha1'] as String,
+        sha256: json['login_sha256'] as String,
       ),
       dob: DobModel(
-        date: (m['dob_date'] ?? '') as String,
-        age: (m['dob_age'] as int?) ?? 0,
+        date: json['dob_date'] as String,
+        age: json['dob_age'] as int,
       ),
       registered: RegisteredModel(
-        date: (m['reg_date'] ?? '') as String,
-        age: (m['reg_age'] as int?) ?? 0,
+        date: json['reg_date'] as String,
+        age: json['reg_age'] as int,
       ),
       id: IdModel(
-        name: (m['id_name'] ?? '') as String,
-        value: (m['id_value'] ?? '') as String,
+        name: json['id_name'] as String,
+        value: json['id_value'] as String?,
       ),
       picture: PictureModel(
-        large: (m['picture_large'] ?? '') as String,
-        medium: (m['picture_medium'] ?? '') as String,
-        thumbnail: (m['picture_thumbnail'] ?? '') as String,
+        large: json['picture_large'] as String,
+        medium: json['picture_medium'] as String,
+        thumbnail: json['picture_thumbnail'] as String,
       ),
     );
   }
