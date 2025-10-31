@@ -14,8 +14,7 @@ class UserDetailsView extends StatefulWidget {
   State<UserDetailsView> createState() => _UserDetailsViewState();
 }
 
-class _UserDetailsViewState extends State<UserDetailsView>
-    with TickerProviderStateMixin, WidgetsBindingObserver {
+class _UserDetailsViewState extends State<UserDetailsView> {
   late final UserDetailsViewModel viewModel;
 
   bool get isPersisted => viewModel.isPersisted;
@@ -23,6 +22,7 @@ class _UserDetailsViewState extends State<UserDetailsView>
   @override
   void initState() {
     super.initState();
+
     viewModel = ContainerInjector().find<UserDetailsViewModel>()..onInit();
   }
 

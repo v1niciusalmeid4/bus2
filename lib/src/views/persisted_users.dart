@@ -32,18 +32,23 @@ class _PersistedUsersViewState extends State<PersistedUsersView> {
   }
 
   Widget _buildState(BuildContext context, Widget? child) {
-    if (viewModel.loading) {
-      return Center(child: CircularProgressIndicator.adaptive());
-    }
+    if (viewModel.loading) return PersistedUsersLoadingState();
+    if (viewModel.error) return PersistedUsersErrorState(viewModel: viewModel);
+    if (viewModel.users.isEmpty) return PersistedUsersEmptyState();
 
-    if (viewModel.error) {
-      return buildError(context);
-    }
-
-    return buildData(context);
+    return PersistedUsersData(viewModel: viewModel);
   }
+}
 
-  Widget buildData(BuildContext context) {
+class PersistedUsersData extends StatelessWidget {
+  final PersistedUsersViewModel viewModel;
+
+  const PersistedUsersData({required this.viewModel, super.key});
+
+  bool get reachMax => viewModel.reachMax;
+
+  @override
+  Widget build(BuildContext context) {
     return PaginationComponent(
       itemCount: viewModel.users.length,
       reachMax: reachMax,
@@ -118,8 +123,33 @@ class _PersistedUsersViewState extends State<PersistedUsersView> {
       },
     );
   }
+}
 
-  Widget buildError(BuildContext context) {
+class PersistedUsersEmptyState extends StatelessWidget {
+  const PersistedUsersEmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Oops! Nenhum usuario persistido ainda!'));
+  }
+}
+
+class PersistedUsersLoadingState extends StatelessWidget {
+  const PersistedUsersLoadingState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator.adaptive());
+  }
+}
+
+class PersistedUsersErrorState extends StatelessWidget {
+  final PersistedUsersViewModel viewModel;
+
+  const PersistedUsersErrorState({required this.viewModel, super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

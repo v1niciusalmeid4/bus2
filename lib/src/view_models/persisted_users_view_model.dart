@@ -52,9 +52,7 @@ class PersistedUsersViewModel extends ChangeNotifier {
 
   Future<void> onRemovePersistedUser(String uuid) async {
     await local.removeUser(uuid);
-
     users.removeWhere((e) => e.login.uuid == uuid);
-
     notifyListeners();
   }
 
@@ -62,10 +60,7 @@ class PersistedUsersViewModel extends ChangeNotifier {
     await navigator.toNamed('/user_details', arguments: user);
 
     final persisted = await local.userExistsByUuid(user.login.uuid);
-
-    if (persisted) {
-      return;
-    }
+    if (persisted) return;
 
     onRemovePersistedUser(user.login.uuid);
   }

@@ -78,24 +78,27 @@ class _HomeViewState extends State<HomeView>
       body: ListenableBuilder(listenable: viewModel, builder: _buildState),
       floatingActionButton: FloatingActionButton(
         onPressed: () => viewModel.toPersistedUsers(),
-        child: Icon(Icons.bookmark),
+        child: const Icon(Icons.bookmark),
       ),
     );
   }
 
   Widget _buildState(BuildContext context, Widget? child) {
-    if (viewModel.loading) {
-      return Center(child: CircularProgressIndicator.adaptive());
-    }
+    if (viewModel.loading) return const HomeLoadingState();
+    if (viewModel.error) return HomeErrorState(viewModel: viewModel);
+    if (viewModel.users.isEmpty) return const HomeEmptyState();
 
-    if (viewModel.error) {
-      return buildError(context);
-    }
-
-    return buildData(context);
+    return HomeStableState(viewModel: viewModel);
   }
+}
 
-  Widget buildData(BuildContext context) {
+class HomeStableState extends StatelessWidget {
+  final HomeViewModel viewModel;
+
+  const HomeStableState({required this.viewModel, super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return ListView.separated(
       itemBuilder: (context, index) {
         final user = viewModel.users[index];
@@ -163,16 +166,41 @@ class _HomeViewState extends State<HomeView>
       separatorBuilder: (BuildContext context, int index) => Divider(),
     );
   }
+}
 
-  Widget buildError(BuildContext context) {
+class HomeLoadingState extends StatelessWidget {
+  const HomeLoadingState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator.adaptive());
+  }
+}
+
+class HomeEmptyState extends StatelessWidget {
+  const HomeEmptyState({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: Text('Oops! Nenhum usuário encontrado!'));
+  }
+}
+
+class HomeErrorState extends StatelessWidget {
+  final HomeViewModel viewModel;
+
+  const HomeErrorState({required this.viewModel, super.key});
+
+  @override
+  Widget build(BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(viewModel.failureMessage ?? ''),
+          Text(viewModel.failureMessage ?? 'Oops! algo errado aconteceu'),
           ElevatedButton(
             onPressed: () async => await viewModel.onInit(),
-            child: Text('Tentar novamente'),
+            child: const Text('Tentar novamente'),
           ),
         ],
       ),
